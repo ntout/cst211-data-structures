@@ -61,9 +61,9 @@ linked_list<T>& linked_list<T>::operator=(const linked_list& rhs)
 		if (head_ != nullptr) delete head_;
 		if (tail_ != nullptr) delete tail_;
 
-		head_ = rhs.head_;
-		tail_ = rhs.tail_;
-		length_ = rhs.length_;
+		head_ = rhs.get_head();
+		tail_ = rhs.get_tail();
+		length_ = rhs.get_length();
 	}
 
 	return *this;
@@ -83,9 +83,9 @@ linked_list<T>& linked_list<T>::operator=(linked_list&& rhs) noexcept
 		if (head_ != nullptr) delete head_;
 		if (tail_ != nullptr) delete tail_;
 
-		head_ = rhs.head_;
-		tail_ = rhs.tail_;
-		length_ = rhs.length_;
+		head_ = rhs.get_head();
+		tail_ = rhs.get_tail();
+		length_ = rhs.get_length();
 	}
 
 	return *this;
@@ -100,45 +100,163 @@ linked_list<T>::operator bool() const
 template <class T>
 void linked_list<T>::append(const T& data)
 {
-
-	
+	if (head_ == nullptr && tail_ == nullptr)
+	{
+		auto* node = new list_node<T>(data);
+		head_ = node;
+		tail_ = node;
+		length_ += 1;
+	}
+	else if (head_ != nullptr && tail_ != nullptr)
+	{
+		auto* node = new list_node<T>(data);
+		node->set_previous(tail_);
+		tail_->set_next(node);
+		tail_ = node;
+		length_ += 1;
+	}
 }
 
-//template <class T>
-//void linked_list<T>::extract(const T& data)
-//{
-//	// extract deletes the node
-//
-//	//1 auto current = head
-//	//2 while (current != nullptr && current->get_data() != data)
-//	//		{ current = current->next }
-//	//3 if (current->get_data() == data) 
-//	//		{ 
-//	//	if(empty) throw exemption
-//	//	else:
-//	//	if head
-//	//	head->next->previous = nullptr
-//	//	head = head_->next
-//	//	if tail:
-//	//	tail->previous->next = nullptr
-//	//	tail = tail->previous
-//	//  if middle (not head or tail):
-//	//4 current->next->previous = current->previous
-//	//5 current->previous->next = current->next
-//	//
-//	//6 delete current
-//	//7 decriment length
-//}
+template <class T>
+void linked_list<T>::prepend(const T& data)
+{
+	if (head_ == nullptr && tail_ == nullptr)
+	{
+		auto* node = new list_node<T>(data);
+		head_ = node;
+		tail_ = node;
+		length_ += 1;
+	}
+	else if (head_ != nullptr && tail_ != nullptr)
+	{
+		auto* node = new list_node<T>(data);
+		node->set_next(head_);
+		head_->set_previous(node);
+		head_ = node;
+		length_ += 1;
+	}
+}
 
-//template <class T>
-//void linked_list<T>::insert_after(const T& data, const T& after)
-//{
-//	//insert(data) 6, current(after) 5
-//
-//	//1 create new node(previous=current, next=current->next)
-//	//2 new_node-next-previous=new_node
-//	//3 current-next = new_node 
-//}
+template <class T>
+void linked_list<T>::remove_last()
+{
+	if(tail_ != nullptr)
+	{
+		auto previous = tail_->get_previous();
+		previous->set_next(nullptr);
+
+		delete tail_;
+
+		tail_ = previous;
+
+		length_ -= 1;
+	}
+}
+
+template <class T>
+void linked_list<T>::remove_first()
+{
+	if (head_ != nullptr)
+	{
+		auto next = head_->get_next();
+		next->set_previous(nullptr);
+
+		delete head_;
+
+		head_ = next;
+
+		length_ -= 1;
+	}
+}
+
+template <class T>
+void linked_list<T>::extract(const T& data)
+{
+	if (!this->is_empty())
+	{
+		auto current = head_;
+		while(current->get_data() != data)
+		{
+			current = current->get_next();
+		}
+
+		if(current == head_)
+		{
+			this->remove_first();
+		}
+		else if (current == tail_)
+		{
+			this->remove_last();
+		}
+		else
+		{
+			auto prev = current->get_previous();
+			auto next = current->get_next();
+			prev->set_next(next);
+			next->set_previous(prev);
+
+			delete current;
+			length_ -= 1;
+		}
+	}
+}
+
+template <class T>
+void linked_list<T>::insert_after(const T& data, const T& after)
+{
+	if (!this->is_empty())
+	{
+		auto current = tail_;
+		while (current->get_data() != after)
+		{
+			current = current->get_next();
+		}
+		if (current == tail_)
+		{
+			this->append(data);
+		}
+		else
+		{
+			auto* node = new list_node<T>(data);
+			node->set_previous(current);
+			node->set_next(current->get_next());
+
+			current->get_next()->set_previous(node);
+			current->set_next(node);
+
+			length_ += 1;
+		}
+	}
+}
+
+template <class T>
+void linked_list<T>::insert_before(const T& data, const T& before)
+{
+	if (!this->is_empty())
+	{
+		auto current = head_;
+		while (current->get_data() != before)
+		{
+			current = current->get_next();
+		}
+		if (current == head_)
+		{
+			this->prepend(data);
+		}
+		else
+		{
+			auto* node = new list_node<T>(data);
+			node->set_previous(current->get_previous());
+			node->set_next(current);
+
+			current->get_previous()->set_next(node);
+			current->set_previous(node);
+
+			length_ += 1;
+		}
+	}
+}
+
 
 template <class T>
 linked_list<T>& linked_list<T>::merge(const linked_list<T>& rhs)
@@ -166,31 +284,32 @@ linked_list<T>& linked_list<T>::merge(const linked_list<T>& rhs)
 	return this;
 }
 
-//template <class T>
-//void linked_list<T>::shuffle()
-//{
-//	std::random_device device;
-//	std::mt19937 generator(device());
-//	std::uniform_int_distribution<int> distribution(1, length_);
-//
-//	for(size_t i = 0; i < length_; ++i)
-//	{
-//		auto i1 = distribution(generator) - 1;
-//		auto i2 = distribution(generator) - 1;
-//		this->insert_after(this[i1], this[i2]);
-//	}
-//}
-
 template <class T>
 void linked_list<T>::clear() noexcept
 {
-	list_node<T>* current = head_;
-	while (current != nullptr) {
-		list_node<T>* next = current->get_next();
-		delete current;
-		current = next;
+	if (!this->is_empty())
+	{
+		auto* current = head_;
+		while (current != nullptr) {
+			list_node<T>* next = current->get_next();
+			if (current != nullptr) delete current;
+			current = next;
+		}
 	}
 	head_ = nullptr;
+	tail_ = nullptr;
+}
+
+template <class T>
+T& linked_list<T>::last()
+{
+	return tail_->get_data();
+}
+
+template <class T>
+T linked_list<T>::last() const
+{
+	return tail_->get_data();
 }
 
 template <class T>

@@ -24,6 +24,7 @@ public:
 	void set_previous(list_node<T>* const previous) noexcept;
 
 	~list_node() = default;
+
 private:
 	list_node<T>* next_{ nullptr };
 	list_node<T>* previous_{ nullptr };
