@@ -165,6 +165,7 @@
     <ClCompile Include="pair_test.cpp" />
     <ClCompile Include="StarterLinkedListTest_v1.0.cpp" />
     <ClCompile Include="static_queue_test.cpp" />
+    <ClCompile Include="static_stack_test.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

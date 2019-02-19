@@ -161,6 +161,7 @@
     <ClInclude Include="i_iterator.hpp" />
     <ClInclude Include="i_queue.hpp" />
     <ClInclude Include="i_row.hpp" />
+    <ClInclude Include="i_stack.hpp" />
     <ClInclude Include="linked_list.hpp" />
     <ClInclude Include="list_iterator.hpp" />
     <ClInclude Include="list_node.hpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="pair.hpp" />
     <ClInclude Include="row.hpp" />
     <ClInclude Include="static_queue.hpp" />
+    <ClInclude Include="static_stack.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

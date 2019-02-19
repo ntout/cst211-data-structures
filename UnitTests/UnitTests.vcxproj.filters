@@ -56,5 +56,8 @@
     <ClCompile Include="static_queue_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="static_stack_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
