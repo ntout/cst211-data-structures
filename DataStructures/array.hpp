@@ -19,6 +19,7 @@ public:
 	T operator[](int index) const noexcept(false);
 	operator bool();
 
+
 	int get_start_index() const;
 	size_t get_length() const;
 
@@ -159,6 +160,7 @@ dynamic_array<T>::operator bool()
 {
 	return (*this != 0);
 }
+
 
 template <class T>
 int dynamic_array<T>::get_start_index() const
