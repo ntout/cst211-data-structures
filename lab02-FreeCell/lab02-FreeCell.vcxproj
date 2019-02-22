@@ -153,6 +153,8 @@
   <ItemGroup>
     <ClInclude Include="card.hpp" />
     <ClInclude Include="deck.hpp" />
+    <ClInclude Include="free_cell.hpp" />
+    <ClInclude Include="idk.hpp" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>

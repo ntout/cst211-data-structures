@@ -24,6 +24,12 @@
     <ClInclude Include="card.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="free_cell.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="idk.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
