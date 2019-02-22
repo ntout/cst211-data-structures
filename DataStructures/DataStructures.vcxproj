@@ -156,6 +156,7 @@
     <ClInclude Include="array2d_p.hpp" />
     <ClInclude Include="backward_iterator.hpp" />
     <ClInclude Include="dynamic_queue.hpp" />
+    <ClInclude Include="dynamic_stack.hpp" />
     <ClInclude Include="forward_iterator.hpp" />
     <ClInclude Include="i_array2d.hpp" />
     <ClInclude Include="i_iterator.hpp" />

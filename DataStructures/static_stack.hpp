@@ -63,8 +63,7 @@ static_stack<T>& static_stack<T>::operator=(const static_stack& rhs)
 {
 	if (this != &rhs)
 	{
-		this.stack_ = rhs.stack_;
-		this->size_ = rhs->size_;
+		stack_ = rhs.stack_;
 	}
 	return *this;
 }
@@ -146,11 +145,7 @@ bool static_stack<T>::full() const noexcept
 template <class T>
 void static_stack<T>::clear() noexcept
 {
-	for(auto i{0}; i < this->size_; ++i)
-	{
-		stack_[i] = 0;
-		top_ = this->size_ + 1;
-	}
+	
 }
 
 template <class T>

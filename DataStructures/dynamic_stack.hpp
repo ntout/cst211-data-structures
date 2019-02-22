@@ -20,6 +20,10 @@ public:
 	T peek() override;
 	void push(T data) override;
 	void clear() noexcept override;
+	bool empty() const noexcept override;
+	size_t size() const noexcept override;
+
+	linked_list<T> get_stack();
 private:
 	linked_list<T> stack_{};
 };
@@ -41,7 +45,7 @@ dynamic_stack<T>& dynamic_stack<T>::operator=(const dynamic_stack& rhs)
 {
 	if (this != &rhs)
 	{
-		this->stack_ = rhs->stack_;
+		stack_ = rhs.stack_;
 	}
 	return *this;
 }
@@ -51,7 +55,7 @@ dynamic_stack<T>& dynamic_stack<T>::operator=(dynamic_stack&& rhs) noexcept
 {
 	if (this != &rhs)
 	{
-		this->stack_ = rhs->stack_;
+		stack_ = rhs->stack_;
 	}
 	return *this;
 }
@@ -80,6 +84,24 @@ template <class T>
 void dynamic_stack<T>::clear() noexcept
 {
 	stack_.clear();
+}
+
+template <class T>
+bool dynamic_stack<T>::empty() const noexcept
+{
+	return stack_.is_empty();
+}
+
+template <class T>
+size_t dynamic_stack<T>::size() const noexcept
+{
+	return stack_.get_length();
+}
+
+template <class T>
+linked_list<T> dynamic_stack<T>::get_stack()
+{
+	return stack_;
 }
 
 

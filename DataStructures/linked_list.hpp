@@ -289,10 +289,9 @@ void linked_list<T>::clear() noexcept
 {
 	if (!this->is_empty())
 	{
-		auto* current = head_;
+		auto current = head_;
 		while (current != nullptr) {
-			list_node<T>* next = current->get_next();
-			if (current != nullptr) delete current;
+			auto next = current->get_next();
 			current = next;
 		}
 	}

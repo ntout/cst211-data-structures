@@ -8,11 +8,12 @@
 class deck
 {
 public:
-	explicit  deck();
+	explicit  deck() = default;
 	~deck() = default;
 
 	card get_card(int index) const;
 
+	void load_hopper();
 	void shuffle();
 	
 private:
@@ -22,8 +23,12 @@ private:
 	dynamic_array<card> hopper_;
 };
 
+inline card deck::get_card(const int index) const
+{
+	return hopper_[index];
+}
 
-inline deck::deck()
+inline void deck::load_hopper()
 {
 	hopper_.set_length(52);
 	auto i{ 0 };
@@ -33,15 +38,9 @@ inline deck::deck()
 		{
 			hopper_[i].set_rank(rank);
 			hopper_[i].set_suit(suit);
-			hopper_[i].set_view();
 			i = i + 1;
 		}
 	}
-}
-
-inline card deck::get_card(const int index) const
-{
-	return hopper_[index];
 }
 
 inline void deck::shuffle()

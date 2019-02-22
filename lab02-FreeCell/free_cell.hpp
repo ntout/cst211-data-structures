@@ -16,7 +16,6 @@ public:
 
 	card get_cells(int index);
 	static_stack<card> get_home(int index);
-	dynamic_stack<card> get_tableau(int index);
 
 	void display_stack();
 	card get_nth(const int arr_index, const int ll_index);
@@ -55,11 +54,6 @@ inline card free_cell::get_cells(const int index)
 inline static_stack<card> free_cell::get_home(const int index)
 {
 	return home_[index];
-}
-
-inline dynamic_stack<card> free_cell::get_tableau(const int index)
-{
-	return tableau_[index];
 }
 
 inline void free_cell::display_stack()
@@ -125,3 +119,6 @@ inline void free_cell::display_table()
 
 
 #endif
+
+
+
