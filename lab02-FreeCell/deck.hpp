@@ -17,9 +17,9 @@ public:
 	void shuffle();
 	
 private:
-	const wchar_t* rank_[13] = {
-		L"A", L"2", L"3", L"4", L"5", L"6", L"7", L"8", L"9", L"T", L"J", L"Q", L"K"};
-	const wchar_t* suit_[4] = { L"\x2665", L"\x2666", L"\x2660", L"\x2663" };
+	std::string rank_[13] = {
+		"A", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K"};
+	std::string suit_[4] = { "H", "D", "C", "S" };
 	dynamic_array<card> hopper_;
 };
 
@@ -38,6 +38,12 @@ inline void deck::load_hopper()
 		{
 			hopper_[i].set_rank(rank);
 			hopper_[i].set_suit(suit);
+			hopper_[i].set_value((i % 13) + 1);
+			if(suit == "H" || suit == "D")
+			{
+				hopper_[i].set_color(0);
+			}
+			else(hopper_[i].set_color(1));
 			i = i + 1;
 		}
 	}

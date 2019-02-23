@@ -24,21 +24,22 @@ public:
 	bool full() const noexcept;
 	void clear() noexcept override;
 
-	size_t get_top() const;
+	void set_size(size_t size);
+	int get_top() const;
 
 private:
-	dynamic_array<T> stack_{};
-	size_t top_{};
+	dynamic_array<T> stack_;
+	int top_{};
 };
 
 template <class T>
-static_stack<T>::static_stack(const size_t& size)
+static_stack<T>::static_stack(const size_t& size):stack_(size)
 {
 	try
 	{
-		stack_.set_length(size);
+		//stack_.set_length(size);
 		this->size_ = size;
-		top_ = size + 1;
+		top_ = -1;
 	}
 	catch (const std::bad_alloc & exception)
 	{
@@ -82,7 +83,7 @@ static_stack<T>& static_stack<T>::operator=(static_stack&& rhs) noexcept
 template <class T>
 size_t static_stack<T>::size() const noexcept
 {
-	if(top_ != this->size_ + 1)
+	if (top_ >= 0)
 	{
 		return top_ + 1;
 	}
@@ -92,21 +93,22 @@ size_t static_stack<T>::size() const noexcept
 template <class T>
 bool static_stack<T>::empty() const noexcept
 {
-	return top_ == this->size_ + 1;
+	return top_ == -1;
 }
 
 template <class T>
 T static_stack<T>::pop()
 {
-	if(this->empty())
+	auto data = top_;
+	if (this->empty())
 	{
-		//throw StackEmptyExcpetion;
+
 	}
-	else
+	else 
 	{
 		top_ -= 1;
 	}
-	return stack_[top_ + 1];
+	return stack_[data];
 }
 
 template <class T>
@@ -119,11 +121,11 @@ T static_stack<T>::peek()
 template <class T>
 void static_stack<T>::push(T data)
 {
-	if(this->size() == stack_.get_length())
+	if (full())
 	{
 		//throw stack full exception
 	}
-	else if(this->empty())
+	else if (this->empty())
 	{
 		top_ = 0;
 		stack_[top_] = data;
@@ -145,11 +147,17 @@ bool static_stack<T>::full() const noexcept
 template <class T>
 void static_stack<T>::clear() noexcept
 {
-	
+
 }
 
 template <class T>
-size_t static_stack<T>::get_top() const
+void static_stack<T>::set_size(size_t size)
+{
+	stack_.set_length(size);
+}
+
+template <class T>
+int static_stack<T>::get_top() const
 {
 	return top_;
 }

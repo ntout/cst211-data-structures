@@ -19,56 +19,98 @@
 #define DIAMOND L"\x2666"
 #define club	L"\x2663"
 
+using std::string;
+using std::cout;
+
 class card
 {
 public:
 	explicit card() = default;
-
+	//card(const card& copy);
+	//card& operator=(const card& rhs);
 
 	void display_card() const;
+	void display_top() const;
 
-
-	const wchar_t*  get_rank() const;
-	const wchar_t*  get_suit() const;
-	void set_rank(const wchar_t* rank);
-	void set_suit(const wchar_t* suit);
+	string  get_rank() const;
+	string  get_suit() const;
+	int get_value() const;
+	int get_color() const;
+	void set_rank(string rank);
+	void set_suit(string suit);
+	void set_value(int n);
+	void set_color(int n);
 
 private:
-	const wchar_t* rank_{};
-	const wchar_t* suit_{};
+	string rank_{" "};
+	string suit_{" "};
+	int value_{};
+	int color_{};
 
 };
 
 inline void card::display_card() const
 {
-	if (suit_ == HEART || suit_ == DIAMOND)
+	if (suit_ == "H" || suit_ == "D")
 	{
-		std::wcout << RED << suit_ << rank_ << RESET;
+		std::cout << RED << rank_ << suit_ << RESET << "|";
 	}
 	else
 	{
-		std::wcout << GREEN << suit_ << rank_ << RESET;
+		std::cout  << CYAN << rank_ << suit_ << RESET << "|";
 	}
 }
 
-inline const wchar_t* card::get_rank() const
+inline void card::display_top() const
+{
+	if (suit_ == "H" || suit_ == "D")
+	{
+		std::cout << RED << "---" << RESET;
+	}
+	else
+	{
+		std::cout << CYAN <<"---" << RESET;
+	}
+}
+
+inline string card::get_rank() const
 {
 	return rank_;
 }
 
-inline const wchar_t* card::get_suit() const
+inline string card::get_suit() const
 {
 	return  suit_;
 }
 
-inline void card::set_rank(const wchar_t* rank)
+inline int card::get_value() const
+{
+	return value_;
+}
+
+inline int card::get_color() const
+{
+	return color_;
+}
+
+inline void card::set_rank(string rank)
 {
 	rank_ = rank;
 }
 
-inline void card::set_suit(const wchar_t* suit)
+inline void card::set_suit(string suit)
 {
 	suit_ = suit;
+}
+
+inline void card::set_value(int n)
+{
+	value_ = n;
+}
+
+inline void card::set_color(int n)
+{
+	color_ = n;
 }
 
 

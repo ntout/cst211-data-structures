@@ -11,13 +11,20 @@
 
 int main()
 {
-	_setmode(_fileno(stdout), _O_U16TEXT);
+	//_setmode(_fileno(stdout), _O_U16TEXT);
 	deck d;
 	d.load_hopper();
 	d.shuffle();
+
 	free_cell game;
 	game.deal_cards(d);
-	game.display_table();
+	game.display_game();
 
+	while(true)
+	{
+		game.move_card();
+		game.display_game();
+	}
+	
 	return 0;	
 }

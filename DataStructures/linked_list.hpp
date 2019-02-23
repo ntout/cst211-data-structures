@@ -149,7 +149,7 @@ void linked_list<T>::remove_last()
 
 		tail_ = previous;
 
-		length_ -= 1;
+		--length_;
 	}
 }
 
