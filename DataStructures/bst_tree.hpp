@@ -5,28 +5,33 @@
 #include "i_tree.hpp"
 #include <functional>
 #include <iostream>
+#include "static_stack.hpp"
+#include "static_queue.hpp"
+#include "dynamic_queue.hpp"
 
 template <class K, class V>
 class bst_tree : public i_tree<K, V>
 {
 public:
 	bst_tree();
-	~bst_tree() = default; //clear -> postorder (istead of visit, check if null, delete)
+	~bst_tree();
 	bst_tree(const bst_tree& copy) noexcept(false);
 	bst_tree& operator=(const bst_tree& rhs) noexcept(false);
 	bst_tree(bst_tree&& copy) noexcept(false);
 	bst_tree& operator=(bst_tree&& rhs) noexcept(false);
 	void set_visit_function(std::function<void(const pair_node<K, V>* node)> visit) noexcept override { visit_ = visit; }
-	void clear() noexcept override;
+	void clear() noexcept override { clear(root_); root_ = nullptr; }
 	bool empty() const noexcept override;
 	void in_order() const noexcept override { in_order(root_); }
 	void pre_order() const noexcept override { pre_order(root_); }
 	void post_order() const noexcept override { post_order(root_); }
 	void breadth_first() const noexcept override;
-	void insert(const K key, const V value) noexcept(false) override;
-	void remove(const K key) noexcept(false) override;
-	V search(const K& key) const noexcept(false) override;
-	V& search(const K& key) noexcept(false) override;
+	void insert(const K key, const V value) noexcept(false) override { insert(root_, key, value); }
+	void remove(const K key) noexcept(false) override { remove(root_, key); }
+	V search(const K& key) const noexcept(false) override { return search(root_, key); }
+	V& search(const K& key) noexcept(false) override { return search(root_, key); }
+
+	K find_smallest() const noexcept(false) { return find_smallest(root_); }
 
 private:
 	bst_node<K, V>* root_ = nullptr;
@@ -36,13 +41,23 @@ private:
 	void in_order(bst_node<K, V>* root) const noexcept;
 	void pre_order(bst_node<K, V>* root) const noexcept;
 	void post_order(bst_node<K, V>* root) const noexcept;
-	void remove(bst_node<K, V>* root) noexcept(false);
+	
+	void remove(bst_node<K, V>* parent, const K key) noexcept(false);
+	void remove_root_match();
+	void remove_match(bst_node<K, V>* parent, bst_node<K, V>* match, bool left);
+	void clear(bst_node<K, V>* root) noexcept;
+
+	V search(bst_node<K, V>* root, const K& key) const noexcept(false);
+	V& search(bst_node<K, V>* root, const K& key) noexcept(false);
+
+	K find_smallest(bst_node<K, V>* root);
+
 };
 
 template <class K, class V>
 bst_tree<K, V>::bst_tree()
 {
-	auto visit = [&](const pair_node<int, std::string> * const node)
+	auto visit = [&](const pair_node<K, V> * const node)
 	{
 		std::cout << node->get_key() << " " << node->get_data() << std::endl;
 	};
@@ -51,8 +66,15 @@ bst_tree<K, V>::bst_tree()
 }
 
 template <class K, class V>
+bst_tree<K, V>::~bst_tree()
+{
+	bst_tree<K, V>::clear();
+}
+
+template <class K, class V>
 bst_tree<K, V>::bst_tree(const bst_tree& copy) noexcept(false)
 {
+	*this = copy;
 }
 
 template <class K, class V>
@@ -73,67 +95,16 @@ bst_tree<K, V>& bst_tree<K, V>::operator=(bst_tree&& rhs) noexcept(false)
 }
 
 template <class K, class V>
-void bst_tree<K, V>::clear() noexcept
-{
-
-}
-
-template <class K, class V>
 bool bst_tree<K, V>::empty() const noexcept
 {
-	return true;
+	return root_ == nullptr;
 }
+
 
 template <class K, class V>
 void bst_tree<K, V>::breadth_first() const noexcept
 {
-}
-
-template <class K, class V>
-void bst_tree<K, V>::insert(const K key, const V value) noexcept(false)
-{
-	insert(root_, key, value);
-}
-
-template <class K, class V>
-void bst_tree<K, V>::remove(const K key) noexcept(false)
-{
-	if(empty()){ throw "Tree is empty"; }
-	else
-	{
-		auto curr = root_;
-		auto prev = root_;
-		auto found{false};
-		while (curr != nullptr && found)
-		{
-			if (curr->get_key() == key) found = true;
-			else
-			{
-				prev = curr;
-				if (curr->get_key() > key) curr = curr->get_left();
-				else curr = curr->get_right();
-			}
-		}
-		if(curr == nullptr) { throw "Current equals nullptr"; }
-		else if(found)
-		{
-			if (root_ == curr) remove(root_);
-			else if (prev->get_key() > key) remove(prev->get_left());
-			else remove(prev->get_right());
-		}
-	}
-}
-
-template <class K, class V>
-V bst_tree<K, V>::search(const K& key) const noexcept(false)
-{
-	return V();
-}
-
-template <class K, class V>
-V& bst_tree<K, V>::search(const K& key) noexcept(false)
-{
-	return V();
+	
 }
 
 template <class K, class V>
@@ -190,11 +161,198 @@ void bst_tree<K, V>::post_order(bst_node<K, V>* root) const noexcept
 }
 
 template <class K, class V>
-void bst_tree<K, V>::remove(bst_node<K, V>* root) noexcept(false)
+K bst_tree<K, V>::find_smallest(bst_node<K, V>* root)
 {
-	auto curr = root;
-	if (root == nullptr) throw "Root == nullptr";
-	//else if(root)
+	if(root_ == nullptr)
+	{
+		throw "tree is empty";
+	}
+	else
+	{
+		if(root->get_left() != nullptr)
+		{
+			return find_smallest(root->get_left());
+		}
+		else
+		{
+			return root->get_key();
+		}
+	}
+}
+
+template <class K, class V>
+void bst_tree<K, V>::remove(bst_node<K, V>* parent, const K key) noexcept(false)
+{
+	if(root_ != nullptr)
+	{
+		if(root_->get_key() == key)
+		{
+			remove_root_match();
+		}
+		else
+		{
+			if(key < parent->get_key() && parent->get_left() != nullptr)
+			{
+				parent->get_left()->get_key() == key ?
+				remove_match(parent, parent->get_left(), true) :
+				remove(parent->get_left(), key);
+			}
+			else if (key > parent->get_key() && parent->get_right() != nullptr)
+			{
+				parent->get_right()->get_key() == key ?
+				remove_match(parent, parent->get_right(), false) :
+				remove(parent->get_right(), key);
+			}
+			else
+			{
+				throw "Key was not in the tree";
+			}
+		}
+	}
+	else throw "Tree is empty";
+}
+
+template <class K, class V>
+void bst_tree<K, V>::remove_root_match()
+{
+	if(root_ != nullptr)
+	{
+		auto temp = root_;
+		auto root_key = root_->get_key();
+
+		//case 0 - 0 children
+		if(root_->get_left() == nullptr && root_->get_right() == nullptr)
+		{
+			root_ = nullptr;
+			delete temp;
+		}
+		//case 1 - 1 child
+		else if(root_->get_left() == nullptr && root_->get_right() != nullptr)
+		{
+			root_ = root_->get_right();
+			temp->get_right() = nullptr;
+			delete temp;
+		}
+		//case 1 - 1 child
+		else if (root_->get_left() != nullptr && root_->get_right() == nullptr)
+		{
+			root_ = root_->get_left();
+			temp->get_left() = nullptr;
+			delete temp;
+		}
+		//case 2 - 2 children
+		else
+		{
+			K smallest_right_subtree = find_smallest(root_->get_right());
+			remove(root_, smallest_right_subtree);
+			root_->get_key() = smallest_right_subtree;
+		}
+	}
+	else throw "Cannot remove. tree is empty";
+}
+
+template <class K, class V>
+void bst_tree<K, V>::remove_match(bst_node<K, V>* parent, bst_node<K, V>* match, bool left)
+{
+	if(root_ != nullptr)
+	{
+		auto match_key = match->get_key();
+
+		//case 0  - 0 children
+		if(match->get_left() == nullptr && match->get_right() == nullptr)
+		{
+			bst_node<K, V> * temp = match;
+			left ? parent->get_left() = nullptr : parent->get_right() = nullptr;
+			delete temp;
+		}
+		//case 1 - 1 child
+		else if (match->get_left() == nullptr && match->get_right() != nullptr)
+		{
+			left ? parent->get_left() = match->get_right() : parent->get_right() = match->get_right();
+			match->get_right() = nullptr;
+			delete match;
+		}
+		else if (match->get_left() != nullptr && match->get_right() == nullptr)
+		{
+			left ? parent->get_left() = match->get_left() : parent->get_right() = match->get_left();
+			match->get_left() = nullptr;
+			delete match;
+		}
+		//case 2 - 2 children
+		else
+		{
+			K smallest_right_subtree = find_smallest(match->get_right());
+			remove(match, smallest_right_subtree);
+			match->get_key() = smallest_right_subtree;
+		}
+	}
+	else throw "tree is empty";
+}
+
+template <class K, class V>
+void bst_tree<K, V>::clear(bst_node<K, V>* root) noexcept
+{
+	if (root != nullptr)
+	{
+		clear(root->get_left());
+		clear(root->get_right());
+		root = nullptr;
+	}
+	delete root;
+}
+
+template <class K, class V>
+V bst_tree<K, V>::search(bst_node<K, V>* root, const K& key) const noexcept(false)
+{
+	if(root != nullptr)
+	{
+		if(root->get_key() == key)
+		{
+			return root->get_data();
+		}
+		else
+		{
+			if(key < root->get_key())
+			{
+				return search(root->get_left(), key);
+			}
+			else
+			{
+				return search(root->get_right(), key);
+			}
+		}
+	}
+	else
+	{
+		throw "Key not in tree";
+	}
+}
+
+template <class K, class V>
+V& bst_tree<K, V>::search(bst_node<K, V>* root, const K& key) noexcept(false)
+{
+	if (root != nullptr)
+	{
+		if (root->get_key() == key)
+		{
+			return root->get_data();
+		}
+		else
+		{
+			if (key < root->get_key())
+			{
+				return search(root->get_left(), key);
+			}
+			else
+			{
+				return search(root->get_right(), key);
+			}
+		}
+	}
+	else
+	{
+		throw "Key not in tree";
+	}
 }
 
 

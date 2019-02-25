@@ -8,7 +8,7 @@ class bst_node : public pair_node<K, V>
 {
 public:
 	bst_node(const K key, const V value, bst_node<K, V>* right = nullptr, bst_node<K, V>* left = nullptr);
-	~bst_node() = default;
+	~bst_node();
 	bst_node(const bst_node & copy) noexcept;
 	bst_node& operator=(const bst_node& rhs) noexcept;
 	bst_node(bst_node && copy) noexcept;
@@ -32,6 +32,13 @@ bst_node<K, V>::bst_node(const K key, const V value, bst_node<K, V>* right, bst_
 {
 	right_ = right;
 	left_ = left;
+}
+
+template <class K, class V>
+bst_node<K, V>::~bst_node()
+{
+	delete right_;
+	delete left_;
 }
 
 template <class K, class V>
