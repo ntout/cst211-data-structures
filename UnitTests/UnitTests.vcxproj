@@ -159,6 +159,7 @@
   <ItemGroup>
     <ClCompile Include="array2d_test.cpp" />
     <ClCompile Include="array_test.cpp" />
+    <ClCompile Include="bst_test.cpp" />
     <ClCompile Include="linked_list_test.cpp" />
     <ClCompile Include="list_node_test.cpp" />
     <ClCompile Include="node_test.cpp" />

@@ -167,7 +167,6 @@ inline void free_cell::move_card()
 	cout << "Move a card(ex: card t3 to c2 = t3c2): ";
 	std::cin >> input;
 
-
 	const auto area = input[0];  //h = home, t = tableau, c = cell
 	const int column = input[1] - 48;
 	const auto destination = input[2];//h = home, t = tableau, c = cell

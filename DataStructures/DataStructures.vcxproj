@@ -154,7 +154,11 @@
     <ClInclude Include="array.hpp" />
     <ClInclude Include="array2d.hpp" />
     <ClInclude Include="array2d_p.hpp" />
+    <ClInclude Include="avl_node.hpp" />
+    <ClInclude Include="avl_tree.hpp" />
     <ClInclude Include="backward_iterator.hpp" />
+    <ClInclude Include="bst_node.hpp" />
+    <ClInclude Include="bst_tree.hpp" />
     <ClInclude Include="dynamic_queue.hpp" />
     <ClInclude Include="dynamic_stack.hpp" />
     <ClInclude Include="forward_iterator.hpp" />
@@ -163,11 +167,13 @@
     <ClInclude Include="i_queue.hpp" />
     <ClInclude Include="i_row.hpp" />
     <ClInclude Include="i_stack.hpp" />
+    <ClInclude Include="i_tree.hpp" />
     <ClInclude Include="linked_list.hpp" />
     <ClInclude Include="list_iterator.hpp" />
     <ClInclude Include="list_node.hpp" />
     <ClInclude Include="node.hpp" />
     <ClInclude Include="pair.hpp" />
+    <ClInclude Include="pair_node.hpp" />
     <ClInclude Include="row.hpp" />
     <ClInclude Include="static_queue.hpp" />
     <ClInclude Include="static_stack.hpp" />

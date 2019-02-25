@@ -59,5 +59,8 @@
     <ClCompile Include="static_stack_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="bst_test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
