@@ -51,6 +51,8 @@ private:
 
 	K find_smallest(bst_node<K, V>* root);
 
+	bst_node<K, V>* create_node(const K key, const V value);
+
 };
 
 template <class K, class V>
@@ -68,6 +70,7 @@ template <class K, class V>
 bst_tree<K, V>::~bst_tree()
 {
 	bst_tree<K, V>::clear();
+	delete root_;
 }
 
 template <class K, class V>
@@ -112,7 +115,7 @@ void bst_tree<K, V>::insert(bst_node<K, V>*& root, const K key, const V value) n
 {
 	if(root == nullptr)
 	{
-		root = new bst_node<K, V>(key, value, nullptr, nullptr);
+		root = create_node(key, value);
 	}
 	else
 	{
@@ -371,5 +374,12 @@ V& bst_tree<K, V>::search(bst_node<K, V>* root, const K& key) noexcept(false)
 	}
 }
 
+template <class K, class V>
+bst_node<K, V>* bst_tree<K, V>::create_node(const K key, const V value)
+{
+	auto* n = new bst_node<K, V>(key, value, nullptr, nullptr);
+
+	return n;
+}
 
 #endif

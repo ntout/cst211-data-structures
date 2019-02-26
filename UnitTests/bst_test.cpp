@@ -16,7 +16,7 @@ namespace unit_tests
 
 		TEST_METHOD(bst_string_key_test)
 		{
-			//crt_check_memory check;
+			crt_check_memory check;
 			bst_tree<std::string, int> my_tree;
 			const int correct_order[] = { 11, 12, 18, 20, 22, 25 };
 
@@ -70,7 +70,7 @@ namespace unit_tests
 
 		TEST_METHOD(bst_pre_order_test)
 		{
-			//crt_check_memory check;
+			crt_check_memory check;
 			bst_tree<int, std::string> my_tree;
 			const int correct_order[] = { 20, 12, 11, 18, 25, 22 };
 
@@ -97,7 +97,7 @@ namespace unit_tests
 
 		TEST_METHOD(bst_post_order_test)
 		{
-			//crt_check_memory check;
+			crt_check_memory check;
 			bst_tree<int, std::string> my_tree;
 			const int correct_order[] = { 11, 18, 12, 22, 25, 20 };
 
@@ -124,7 +124,7 @@ namespace unit_tests
 
 		TEST_METHOD(bst_breadth_first_test)
 		{
-			//crt_check_memory check;
+			crt_check_memory check;
 			bst_tree<int, std::string> my_tree;
 			const int correct_order[] = { 20, 12, 25, 11, 18, 22 };
 
@@ -151,7 +151,7 @@ namespace unit_tests
 
 		TEST_METHOD(bst_remove_test)
 		{
-			//crt_check_memory check;
+			crt_check_memory check;
 			bst_tree<int, std::string> my_tree;
 			const int correct_order[] = { 12, 18, 22 };
 
@@ -183,7 +183,7 @@ namespace unit_tests
 
 		TEST_METHOD(bst_search_test)
 		{
-			//crt_check_memory check;
+			crt_check_memory check;
 			bst_tree<int, std::string> my_tree;
 			const int correct_order_key[] = { 11, 12, 18, 20, 22, 25 };
 			const std::string correct_order_value[] = 
@@ -212,7 +212,7 @@ namespace unit_tests
 
 		TEST_METHOD(bst_empty_test)
 		{
-			//crt_check_memory check;
+			crt_check_memory check;
 			bst_tree<int, std::string> my_tree;
 
 			std::vector<int> tree_traversal;
@@ -235,7 +235,7 @@ namespace unit_tests
 
 		TEST_METHOD(bst_clear_test)
 		{
-			//crt_check_memory check;
+			crt_check_memory check;
 			bst_tree<int, std::string> my_tree;
 
 			std::vector<int> tree_traversal;
