@@ -122,6 +122,33 @@ namespace unit_tests
 			}
 		}
 
+		TEST_METHOD(bst_breadth_first_test)
+		{
+			//crt_check_memory check;
+			bst_tree<int, std::string> my_tree;
+			const int correct_order[] = { 20, 12, 25, 11, 18, 22 };
+
+			std::vector<int> tree_traversal;
+			const auto visit = [&](const pair_node<int, std::string> * const node)
+			{ tree_traversal.push_back(node->get_key()); };
+
+			my_tree.set_visit_function(visit);
+
+			my_tree.insert(20, "Twenty");
+			my_tree.insert(12, "Twelve");
+			my_tree.insert(25, "Twenty-five");
+			my_tree.insert(11, "Eleven");
+			my_tree.insert(18, "Eighteen");
+			my_tree.insert(22, "Twenty-two");
+
+			my_tree.breadth_first();
+
+			for (size_t i = 0; i < tree_traversal.size(); ++i)
+			{
+				Assert::AreEqual(correct_order[i], tree_traversal[i]);
+			}
+		}
+
 		TEST_METHOD(bst_remove_test)
 		{
 			//crt_check_memory check;

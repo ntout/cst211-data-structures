@@ -8,6 +8,7 @@
 #include "static_stack.hpp"
 #include "static_queue.hpp"
 #include "dynamic_queue.hpp"
+#include <queue>
 
 template <class K, class V>
 class bst_tree : public i_tree<K, V>
@@ -41,7 +42,8 @@ private:
 	void in_order(bst_node<K, V>* root) const noexcept;
 	void pre_order(bst_node<K, V>* root) const noexcept;
 	void post_order(bst_node<K, V>* root) const noexcept;
-	
+	void breadth_first(bst_node<K, V>* root, std::queue< bst_node<K, V>*> q) const noexcept;
+
 	void remove(bst_node<K, V>* parent, const K key) noexcept(false);
 	void remove_root_match();
 	void remove_match(bst_node<K, V>* parent, bst_node<K, V>* match, bool left);
@@ -100,12 +102,13 @@ bool bst_tree<K, V>::empty() const noexcept
 	return root_ == nullptr;
 }
 
-
 template <class K, class V>
 void bst_tree<K, V>::breadth_first() const noexcept
 {
-	
+	std::queue<bst_node<K, V>*> q;
+	 breadth_first(root_, q); 
 }
+
 
 template <class K, class V>
 void bst_tree<K, V>::insert(bst_node<K, V>*& root, const K key, const V value) noexcept(false)
@@ -158,6 +161,22 @@ void bst_tree<K, V>::post_order(bst_node<K, V>* root) const noexcept
 		post_order(root->get_right());
 		visit_(root);
 	}
+}
+
+template <class K, class V>
+void bst_tree<K, V>::breadth_first(bst_node<K, V>* root, std::queue< bst_node<K, V>*> q) const noexcept
+{
+	if(root_ != nullptr)
+	{
+		if (q.empty()) return;
+		auto curr = q.front();
+		visit_(curr);
+		if (curr->get_left() != nullptr) q.push(curr->get_left());
+		if (curr->get_right() != nullptr) q.push(curr->get_right());
+		q.pop();
+		breadth_first(curr, q);
+	}
+	else throw "Tree is empty";
 }
 
 template <class K, class V>
