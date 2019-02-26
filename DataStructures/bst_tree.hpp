@@ -5,9 +5,6 @@
 #include "i_tree.hpp"
 #include <functional>
 #include <iostream>
-#include "static_stack.hpp"
-#include "static_queue.hpp"
-#include "dynamic_queue.hpp"
 #include <queue>
 
 template <class K, class V>
@@ -106,7 +103,7 @@ template <class K, class V>
 void bst_tree<K, V>::breadth_first() const noexcept
 {
 	std::queue<bst_node<K, V>*> q;
-	 breadth_first(root_, q); 
+	breadth_first(root_, q); 
 }
 
 
