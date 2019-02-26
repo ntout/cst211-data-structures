@@ -52,10 +52,15 @@ bst_node<K, V>& bst_node<K, V>::operator=(const bst_node& rhs) noexcept
 {
 	if (this != &rhs)
 	{
-		if (pair_node<K, V>::key_ == nullptr) delete pair_node<K, V>::key_;
-		if (node<V>::data_ == nullptr) delete node<V>::data_;
+		if (pair_node<K, V>::key_ != nullptr) delete pair_node<K, V>::key_;
+		if (node<V>::data_ != nullptr) delete node<V>::data_;
+		delete left_;
+		delete right_;
 
-		pair_node<K,V>::key_ = rhs.get_key();
+		left_ = rhs->get_left();
+		right_ = rhs->get_right();
+
+		pair_node<K, V>::key_ = rhs.get_key();
 		node<V>::data_ = rhs.get_data();
 	}
 	return *this;
@@ -72,6 +77,13 @@ bst_node<K, V>& bst_node<K, V>::operator=(bst_node&& rhs) noexcept
 {
 	if (this != &rhs)
 	{
+		if (pair_node<K, V>::key_ != nullptr) delete pair_node<K, V>::key_;
+		if (node<V>::data_ != nullptr) delete node<V>::data_;
+		delete left_;
+		delete right_;
+
+		left_ = rhs->get_left();
+		right_ = rhs->get_right();
 		pair_node<K, V>::key_ = rhs.get_key();
 		node<V>::data_ = rhs.get_data();
 	}

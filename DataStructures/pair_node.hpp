@@ -41,11 +41,11 @@ pair_node<K, V>& pair_node<K, V>::operator=(const pair_node& rhs) noexcept
 {
 	if (this != &rhs)
 	{
-		if (key_ == nullptr) delete key_;
-		if (node<V>::data_ == nullptr) delete node<V>::data_;
+		if (key_ != nullptr) delete key_;
+		if (node<V>::data_ != nullptr) delete node<V>::data_;
 
-		key_ = rhs.get_key();
-		node<V>::data_ = rhs.get_data();
+		key_ = rhs->get_key();
+		node<V>::data_ = rhs->get_data();
 	}
 	return *this;
 }
@@ -55,7 +55,11 @@ pair_node<K, V>& pair_node<K, V>::operator=(pair_node&& rhs) noexcept
 {
 	if (this != &rhs)
 	{
-		key_ = rhs.get_key();
+		if (key_ != nullptr) delete key_;
+		if (node<V>::data_ != nullptr) delete node<V>::data_;
+
+		key_ = rhs->get_key();
+		node<V>::data_ = rhs->get_data();
 	}
 	return *this;
 }
